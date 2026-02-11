@@ -1,195 +1,139 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mijn Website</title>
-  <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mijn Mooie Website</title>
+    <style>
+        /* Algemene styling */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 1rem 0;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        header nav ul {
+            padding: 0;
+            list-style: none;
+        }
+
+        header nav ul li {
+            display: inline;
+            margin: 0 1rem;
+        }
+
+        header nav ul li a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        /* Main content */
+        main {
+            padding: 20px;
+        }
+
+        section {
+            margin-bottom: 20px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Hero section */
+        #hero {
+            background-color: #5cb85c; /* Groene kleur */
+            color: #fff;
+            text-align: center;
+        }
+
+        #hero h2 {
+            margin-top: 0;
+        }
+
+        .button {
+            display: inline-block;
+            background-color: #333;
+            color: #fff;
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        /* Diensten section */
+        .dienst {
+            margin-bottom: 15px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 1rem 0;
+        }
+    </style>
 </head>
 <body>
-  <!-- Header -->
-  <header class="header">
-    <div class="container">
-      <h1 class="logo">MijnSite</h1>
-      <nav>
-        <ul class="nav-links">
-          <li><a href="#">Home</a></li>
-          <li><a href="#about">Over</a></li>
-          <li><a href="#diensten">Diensten</a></li>
-          <li><a href="#contact">Contact</a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
 
-  <!-- Hero Sectie -->
-  <section class="hero">
-    <div class="hero-content">
-      <h2>Welkom bij MijnSite</h2>
-      <p>Ontdek onze diensten en groei samen met ons online!</p>
-      <a href="#diensten" class="btn">Bekijk diensten</a>
-    </div>
-  </section>
+    <header>
+        <h1>Welkom op Mijn Website</h1>
+        <nav>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Over Mij</a></li>
+                <li><a href="#">Diensten</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
 
-  <!-- Info Sectie -->
-  <section id="about" class="about">
-    <div class="container">
-      <h2>Over Ons</h2>
-      /* Algemene stijl */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+    <main>
+        <section id="hero">
+            <h2>De Beste Plaats voor...</h2>
+            <p>Een korte beschrijving van wat je website te bieden heeft.</p>
+            <a href="#" class="button">Lees Meer</a>
+        </section>
 
-body {
-  font-family: 'Segoe UI', sans-serif;
-  line-height: 1.6;
-  color: #333;
-}
+        <section id="over-mij">
+            <h2>Over Mij</h2>
+            <p>Hier komt informatie over jezelf of je bedrijf.</p>
+        </section>
 
-/* Container */
-.container {
-  width: 90%;
-  max-width: 1100px;
-  margin: 0 auto;
-}
+        <section id="diensten">
+            <h2>Onze Diensten</h2>
+            <div class="dienst">
+                <h3>Dienst 1</h3>
+                <p>Beschrijving van dienst 1.</p>
+            </div>
+            <div class="dienst">
+                <h3>Dienst 2</h3>
+                <p>Beschrijving van dienst 2.</p>
+            </div>
+        </section>
+    </main>
 
-/* Header */
-.header {
-  background: #2c3e50;
-  padding: 1rem 0;
-  color: #fff;
-}
+    <footer>
+        <p>&copy; 2023 Mijn Website</p>
+    </footer>
 
-.logo {
-  font-size: 1.5rem;
-  font-weight: bold;
-}
-
-.nav-links {
-  list-style: none;
-  display: flex;
-  gap: 1.5rem;
-}
-
-.nav-links a {
-  color: #fff;
-  text-decoration: none;
-  transition: color 0.3s;
-}
-
-.nav-links a:hover {
-  color: #f1c40f;
-}
-
-/* Hero Sectie */
-.hero {
-  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-    url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e') no-repeat center/cover;
-  color: white;
-  text-align: center;
-  padding: 6rem 1rem;
-}
-
-.hero h2 {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
-}
-
-.hero p {
-  font-size: 1.2rem;
-  margin-bottom: 2rem;
-}
-
-.btn {
-  background: #f1c40f;
-  color: #333;
-  padding: 0.75rem 1.5rem;
-  text-decoration: none;
-  border-radius: 5px;
-  font-weight: bold;
-  transition: background 0.3s;
-}
-
-.btn:hover {
-  background: #d4ac0d;
-}
-
-/* Secties */
-section {
-  padding: 4rem 0;
-  text-align: center;
-}
-
-/* Diensten Grid */
-.diensten-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 2rem;
-  margin-top: 2rem;
-}
-
-.dienst {
-  background: #ecf0f1;
-  padding: 2rem;
-  border-radius: 10px;
-  transition: transform 0.3s;
-}
-
-.dienst:hover {
-  transform: translateY(-5px);
-}
-
-/* Footer */
-.footer {
-  background: #2c3e50;
-  color: white;
-  text-align: center;
-  padding: 1rem 0;
-  font-size: 0.9rem;
-}
-
-      <p>
-        Wij zijn een creatief team dat websites bouwt met passie, precisie en performance.
-      </p>
-    </div>
-  </section>
-
-  <!-- Diensten -->
-  <section id="diensten" class="diensten">
-    <div class="container">
-      <h2>Onze Diensten</h2>
-      <div class="diensten-grid">
-        <div class="dienst">
-          <h3>Webdesign</h3>
-          <p>Moderne, gebruiksvriendelijke designs op maat.</p>
-        </div>
-        <div class="dienst">
-          <h3>Ontwikkeling</h3>
-          <p>Snelle, veilige en schaalbare websites.</p>
-        </div>
-        <div class="dienst">
-          <h3>SEO</h3>
-          <p>Verbeter je online zichtbaarheid en groei je publiek.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Contact -->
-  <section id="contact" class="contact">
-    <div class="container">
-      <h2>Contact</h2>
-      <p>Heb je vragen? Neem gerust contact met ons op!</p>
-      <a href="mailto:harleydebruyn2012@gmail.com" class="btn">Mail ons</a>
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer class="footer">
-    <p>&copy; dit was harleys skibidi website </p>
-  </footer>
 </body>
 </html>
-
