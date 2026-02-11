@@ -4,90 +4,78 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>De Korenaer Stevensbeek</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Roboto', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f9f9f9;
-        }
-        header {
-            background-color: #004080;
-            color: white;
-            padding: 20px;
-            text-align: center;
-        }
-        nav {
-            background-color: #0066cc;
-            display: flex;
-            justify-content: center;
-        }
-        nav a {
-            color:green;
-            text-decoration: none;
-            padding: 15px 25px;
-            display: block;
-        }
-        nav a:hover {
-            background-color: #004080;
-        }
-        main {
-            padding: 20px;
-        }
-        .intro {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-        .gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-        }
-        .gallery img {
-            width: 100%;
-            height: auto;
-            border-radius: 10px;
-        }
-        footer {
-            background-color: #004080;
-            color: white;
-            text-align: center;
-            padding: 15px;
-            margin-top: 40px;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+
+    <!-- Header -->
     <header>
         <h1>De Korenaer Stevensbeek</h1>
-        <p>Welkom op onze website</p>
+        <p>Voortgezet Speciaal Onderwijs (vso) in Stevensbeek</p>
     </header>
-    <nav>
-        <a href="#home">Home</a>
-        <a href="#over">Over Ons</a>
-        <a href="#activiteiten">Activiteiten</a>
-        <a href="#fotos">Foto's</a>
-        <a href="#contact">Contact</a>
-    </nav>
-    <main>
-        <section id="home" class="intro">
-            <h2>Welkom!</h2>
-            <p>Ontdek wat wij doen en bekijk onze activiteiten en foto's.</p>
-        </section>
 
-        <section id="fotos">
-            <h2>Foto Galerij</h2>
-            <div class="gallery">
-                <img src="https://via.placeholder.com/400x300?text=Foto+1" alt="Foto 1">
-                <img src="https://via.placeholder.com/400x300?text=Foto+2" alt="Foto 2">
-                <img src="https://via.placeholder.com/400x300?text=Foto+3" alt="Foto 3">
-                <img src="https://via.placeholder.com/400x300?text=Foto+4" alt="Foto 4">
+    <!-- Navigatie -->
+    <nav>
+        <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#school">Onze school</a></li>
+            <li><a href="#nieuws">Nieuws</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- Home sectie -->
+    <section id="home" class="section-page">
+        <h2>Welkom bij De Korenaer Stevensbeek</h2>
+        <p>De Korenaer Stevensbeek is een school voor voortgezet speciaal onderwijs. We bieden kleinschalig onderwijs, aandacht voor ontwikkeling en een veilige leeromgeving. :contentReference[oaicite:1]{index=1}</p>
+    </section>
+
+    <!-- Onze school sectie -->
+    <section id="school" class="section-page">
+        <h2>Onze school</h2>
+        <p>Leerroutes, visie en kernwaarden vormen de basis van ons onderwijs. :contentReference[oaicite:2]{index=2}</p>
+        <div class="card-grid">
+            <div class="card">
+                <h3>Missie</h3>
+                <p>Wij zijn er voor jongeren van 12 tot 20 jaar voor wie speciaal onderwijs passend is. :contentReference[oaicite:3]{index=3}</p>
             </div>
-        </section>
-    </main>
+            <div class="card">
+                <h3>Visie</h3>
+                <p>Vertrouwen en perspectief zijn kernwaarden voor onze leerlingen. :contentReference[oaicite:4]{index=4}</p>
+            </div>
+            <div class="card">
+                <h3>Ouders</h3>
+                <p>Wij werken nauw samen met ouders als partners in de ontwikkeling van hun kind. :contentReference[oaicite:5]{index=5}</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Nieuws sectie -->
+    <section id="nieuws" class="section-page">
+        <h2>Laatste Nieuws</h2>
+        <div class="news-list">
+            <article class="news-item">
+                <h4>Bezoek Rijksmuseum</h4>
+                <p>Op woensdag 22 januari hebben de leerlingen een bezoek gebracht aan het Rijksmuseum. :contentReference[oaicite:6]{index=6}</p>
+            </article>
+            <article class="news-item">
+                <h4>Kerstbuffet</h4>
+                <p>Leerlingen maakten een heerlijk kerstbuffet. :contentReference[oaicite:7]{index=7}</p>
+            </article>
+        </div>
+    </section>
+
+    <!-- Contact sectie -->
+    <section id="contact" class="section-page">
+        <h2>Contact</h2>
+        <p>Kloosterstraat 1, 5844 AN Stevensbeek</p>
+        <p>Tel: 0485‑38 29 64 — E‑mail: korenaer.stevensbeek@aloysiusstichting.nl :contentReference[oaicite:8]{index=8}</p>
+    </section>
+
+    <!-- Footer -->
     <footer>
-        &copy; 2026 De Korenaer Stevensbeek. Alle rechten voorbehouden.
+        <p>&copy; 2026 De Korenaer Stevensbeek</p>
     </footer>
+
 </body>
 </html>
