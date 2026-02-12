@@ -1,4 +1,4 @@
-<!-- ================== style.css ================== -->
+<!-- ================== COMPLETE WEBSITE MET FILTERS & ANIMATIES ================== -->
 <style>
 body {
     margin: 0;
@@ -30,6 +30,38 @@ nav a:hover {
     color: #ff0000;
 }
 
+.search-bar {
+    margin-top: 10px;
+}
+
+.search-bar input {
+    padding: 8px;
+    width: 250px;
+    border-radius: 6px;
+    border: none;
+}
+
+.filter-buttons {
+    margin: 15px 0;
+    text-align: center;
+}
+
+.filter-buttons button {
+    margin: 5px;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 20px;
+    background-color: #ff0000;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.filter-buttons button:hover {
+    background-color: #cc0000;
+    transform: scale(1.1);
+}
+
 .container {
     padding: 20px;
     display: grid;
@@ -43,7 +75,14 @@ nav a:hover {
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.5);
     text-align: center;
-    transition: transform 0.3s;
+    transition: transform 0.4s, opacity 0.4s;
+    opacity: 1;
+}
+
+.thumbnail.hide {
+    opacity: 0;
+    transform: scale(0.8);
+    pointer-events: none;
 }
 
 .thumbnail:hover {
@@ -55,45 +94,6 @@ nav a:hover {
     border-radius: 8px;
 }
 
-.video-container {
-    padding: 30px;
-    text-align: center;
-}
-
-iframe {
-    width: 80%;
-    height: 450px;
-    border-radius: 10px;
-}
-
-form {
-    max-width: 500px;
-    margin: 20px auto;
-    display: flex;
-    flex-direction: column;
-}
-
-input, textarea {
-    margin: 10px 0;
-    padding: 10px;
-    border-radius: 6px;
-    border: none;
-}
-
-button {
-    padding: 10px;
-    border: none;
-    border-radius: 6px;
-    background-color: #ff0000;
-    color: white;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #cc0000;
-}
-
 footer {
     background: #000000;
     color: white;
@@ -103,48 +103,35 @@ footer {
 }
 </style>
 
+<script>
+function searchVideos() {
+    let input = document.getElementById("searchInput").value.toLowerCase();
+    let videos = document.getElementsByClassName("thumbnail");
 
-<!-- ================== index.html ================== -->
-<!DOCTYPE html>
-<html lang="nl">
-<head>
-    <meta charset="UTF-8">
-    <title>Mijn YouTube Website</title>
-</head>
-<body>
+    for (let i = 0; i < videos.length; i++) {
+        let title = videos[i].innerText.toLowerCase();
+        if (title.includes(input)) {
+            videos[i].classList.remove("hide");
+        } else {
+            videos[i].classList.add("hide");
+        }
+    }
+}
 
-<header>
-    <h1>Mijn YouTube Video Website</h1>
-</header>
+function filterCategory(category) {
+    let videos = document.getElementsByClassName("thumbnail");
 
-<nav>
-    <a href="index.html">Home</a>
-    <a href="categorie.html">Categorieën</a>
-    <a href="contact.html">Contact</a>
-</nav>
-
-<div class="container">
-    <div class="thumbnail">
-        <a href="video1.html">
-            <img src="https://img.youtube.com/vi/dQw4w9WgXcQ/0.jpg" alt="Video 1">
-            <h3>Video 1</h3>
-        </a>
-    </div>
-
-    <div class="thumbnail">
-        <a href="video2.html">
-            <img src="https://img.youtube.com/vi/9bZkp7q19f0/0.jpg" alt="Video 2">
-            <h3>Video 2</h3>
-        </a>
-    </div>
-</div>
-
-<footer>
-    © 2026 Mijn Website
-</footer>
-
-</body>
-</html>
+    for (let i = 0; i < videos.length; i++) {
+        if (category === "all") {
+            videos[i].classList.remove("hide");
+        } else if (videos[i].dataset.category === category) {
+            videos[i].classList.remove("hide");
+        } else {
+            videos[i].classList.add("hide");
+        }
+    }
+}
+</script>
 
 
 <!-- ================== categorie.html ================== -->
@@ -158,6 +145,9 @@ footer {
 
 <header>
     <h1>Video Categorieën</h1>
+    <div class="search-bar">
+        <input type="text" id="searchInput" onkeyup="searchVideos()" placeholder="Zoek video...">
+    </div>
 </header>
 
 <nav>
@@ -165,124 +155,42 @@ footer {
     <a href="categorie.html">Categorieën</a>
     <a href="contact.html">Contact</a>
 </nav>
+
+<div class="filter-buttons">
+    <button onclick="filterCategory('all')">Alles</button>
+    <button onclick="filterCategory('muziek')">Muziek</button>
+    <button onclick="filterCategory('entertainment')">Entertainment</button>
+    <button onclick="filterCategory('hiphop')">Hip Hop</button>
+</div>
 
 <div class="container">
-    <div class="thumbnail">
+    <div class="thumbnail" data-category="muziek">
         <a href="video1.html">
-            <img src="https://img.youtube.com/vi/dQw4w9WgXcQ/0.jpg" alt="Muziek">
-            <h3>Muziek</h3>
+            <img src="https://img.youtube.com/vi/dQw4w9WgXcQ/0.jpg">
+            <h3>Pop Muziek</h3>
         </a>
     </div>
 
-    <div class="thumbnail">
+    <div class="thumbnail" data-category="entertainment">
         <a href="video2.html">
-            <img src="https://img.youtube.com/vi/9bZkp7q19f0/0.jpg" alt="Entertainment">
-            <h3>Entertainment</h3>
+            <img src="https://img.youtube.com/vi/9bZkp7q19f0/0.jpg">
+            <h3>K-Pop Entertainment</h3>
         </a>
     </div>
 
-    <div class="thumbnail">
-        <a href="https://www.youtube.com/embed/l482T0yNkeo">
-            <img src="https://img.youtube.com/vi/l482T0yNkeo/0.jpg" alt="Rock">
-            <h3>Rock</h3>
+    <div class="thumbnail" data-category="muziek">
+        <a href="video1.html">
+            <img src="https://img.youtube.com/vi/l482T0yNkeo/0.jpg">
+            <h3>Rock Muziek</h3>
         </a>
     </div>
-</div>
 
-<footer>
-    © 2026 Mijn Website
-</footer>
-
-</body>
-</html>
-
-
-<!-- ================== contact.html ================== -->
-<!DOCTYPE html>
-<html lang="nl">
-<head>
-    <meta charset="UTF-8">
-    <title>Contact</title>
-</head>
-<body>
-
-<header>
-    <h1>Contacteer Ons</h1>
-</header>
-
-<nav>
-    <a href="index.html">Home</a>
-    <a href="categorie.html">Categorieën</a>
-    <a href="contact.html">Contact</a>
-</nav>
-
-<form>
-    <input type="text" placeholder="Naam" required>
-    <input type="email" placeholder="Email" required>
-    <textarea rows="5" placeholder="Bericht" required></textarea>
-    <button type="submit">Verstuur</button>
-</form>
-
-<footer>
-    © 2026 Mijn Website
-</footer>
-
-</body>
-</html>
-
-
-<!-- ================== video1.html ================== -->
-<!DOCTYPE html>
-<html lang="nl">
-<head>
-    <meta charset="UTF-8">
-    <title>Video 1</title>
-</head>
-<body>
-
-<header>
-    <h1>Video 1</h1>
-</header>
-
-<nav>
-    <a href="index.html">Home</a>
-    <a href="categorie.html">Categorieën</a>
-    <a href="contact.html">Contact</a>
-</nav>
-
-<div class="video-container">
-    <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
-</div>
-
-<footer>
-    © 2026 Mijn Website
-</footer>
-
-</body>
-</html>
-
-
-<!-- ================== video2.html ================== -->
-<!DOCTYPE html>
-<html lang="nl">
-<head>
-    <meta charset="UTF-8">
-    <title>Video 2</title>
-</head>
-<body>
-
-<header>
-    <h1>Video 2</h1>
-</header>
-
-<nav>
-    <a href="index.html">Home</a>
-    <a href="categorie.html">Categorieën</a>
-    <a href="contact.html">Contact</a>
-</nav>
-
-<div class="video-container">
-    <iframe src="https://www.youtube.com/embed/9bZkp7q19f0" allowfullscreen></iframe>
+    <div class="thumbnail" data-category="hiphop">
+        <a href="video2.html">
+            <img src="https://img.youtube.com/vi/3JZ_D3ELwOQ/0.jpg">
+            <h3>Hip Hop</h3>
+        </a>
+    </div>
 </div>
 
 <footer>
