@@ -1,201 +1,225 @@
-<!-- ================== COMPLETE WEBSITE MET FILTERS & ANIMATIES ================== -->
-<style>
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background-color: #121212;
-    color: #ffffff;
-}
-
-header {
-    background-color: #1f1f1f;
-    padding: 20px;
-    text-align: center;
-}
-
-nav {
-    background-color: #000000;
-    padding: 12px;
-    text-align: center;
-}
-
-nav a {
-    color: white;
-    margin: 0 15px;
-    text-decoration: none;
-    font-weight: bold;
-}
-
-nav a:hover {
-    color: #ff0000;
-}
-
-.search-bar {
-    margin-top: 10px;
-}
-
-.search-bar input {
-    padding: 8px;
-    width: 250px;
-    border-radius: 6px;
-    border: none;
-}
-
-.filter-buttons {
-    margin: 15px 0;
-    text-align: center;
-}
-
-.filter-buttons button {
-    margin: 5px;
-    padding: 8px 15px;
-    border: none;
-    border-radius: 20px;
-    background-color: #ff0000;
-    color: white;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.filter-buttons button:hover {
-    background-color: #cc0000;
-    transform: scale(1.1);
-}
-
-.container {
-    padding: 20px;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
-}
-
-.thumbnail {
-    background: #1e1e1e;
-    padding: 10px;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-    text-align: center;
-    transition: transform 0.4s, opacity 0.4s;
-    opacity: 1;
-}
-
-.thumbnail.hide {
-    opacity: 0;
-    transform: scale(0.8);
-    pointer-events: none;
-}
-
-.thumbnail:hover {
-    transform: scale(1.05);
-}
-
-.thumbnail img {
-    width: 100%;
-    border-radius: 8px;
-}
-
-footer {
-    background: #000000;
-    color: white;
-    text-align: center;
-    padding: 15px;
-    margin-top: 20px;
-}
-</style>
-
-<script>
-function searchVideos() {
-    let input = document.getElementById("searchInput").value.toLowerCase();
-    let videos = document.getElementsByClassName("thumbnail");
-
-    for (let i = 0; i < videos.length; i++) {
-        let title = videos[i].innerText.toLowerCase();
-        if (title.includes(input)) {
-            videos[i].classList.remove("hide");
-        } else {
-            videos[i].classList.add("hide");
-        }
-    }
-}
-
-function filterCategory(category) {
-    let videos = document.getElementsByClassName("thumbnail");
-
-    for (let i = 0; i < videos.length; i++) {
-        if (category === "all") {
-            videos[i].classList.remove("hide");
-        } else if (videos[i].dataset.category === category) {
-            videos[i].classList.remove("hide");
-        } else {
-            videos[i].classList.add("hide");
-        }
-    }
-}
-</script>
-
-
-<!-- ================== categorie.html ================== -->
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-    <meta charset="UTF-8">
-    <title>Categorieën</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CyberGame Arena 2.0</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
+
+body{
+    background:black;
+    color:#0ff;
+    text-align:center;
+    overflow:hidden;
+}
+
+h1{
+    margin:15px;
+    text-shadow:0 0 10px #0ff, 0 0 20px #00f;
+}
+
+button{
+    padding:10px 20px;
+    margin:5px;
+    border:none;
+    background:#0ff;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+button:hover{
+    background:#00f;
+    color:white;
+}
+
+#gameArea{
+    position:relative;
+    width:100%;
+    height:60vh;
+    border:2px solid #0ff;
+    margin-top:20px;
+    overflow:hidden;
+}
+
+.enemy{
+    position:absolute;
+    width:40px;
+    height:40px;
+    background:red;
+    border-radius:50%;
+}
+
+.player{
+    position:absolute;
+    width:40px;
+    height:40px;
+    background:#0ff;
+    border-radius:50%;
+}
+
+#scoreBoard{
+    margin-top:10px;
+}
+
+@media(max-width:600px){
+    #gameArea{
+        height:50vh;
+    }
+}
+</style>
 </head>
+
 <body>
 
-<header>
-    <h1>Video Categorieën</h1>
-    <div class="search-bar">
-        <input type="text" id="searchInput" onkeyup="searchVideos()" placeholder="Zoek video...">
-    </div>
-</header>
+<h1>⚡ CYBERGAME ARENA 2.0 ⚡</h1>
 
-<nav>
-    <a href="index.html">Home</a>
-    <a href="categorie.html">Categorieën</a>
-    <a href="contact.html">Contact</a>
-</nav>
-
-<div class="filter-buttons">
-    <button onclick="filterCategory('all')">Alles</button>
-    <button onclick="filterCategory('muziek')">Muziek</button>
-    <button onclick="filterCategory('entertainment')">Entertainment</button>
-    <button onclick="filterCategory('hiphop')">Hip Hop</button>
+<div>
+    Moeilijkheid:
+    <select id="difficulty">
+        <option value="2000">Makkelijk</option>
+        <option value="1000">Normaal</option>
+        <option value="500">Moeilijk</option>
+    </select>
 </div>
 
-<div class="container">
-    <div class="thumbnail" data-category="muziek">
-        <a href="video1.html">
-            <img src="https://img.youtube.com/vi/dQw4w9WgXcQ/0.jpg">
-            <h3>Pop Muziek</h3>
-        </a>
-    </div>
+<button onclick="startGame()">Start Game</button>
+<button onclick="toggleMusic()">🎵 Muziek</button>
 
-    <div class="thumbnail" data-category="entertainment">
-        <a href="video2.html">
-            <img src="https://img.youtube.com/vi/9bZkp7q19f0/0.jpg">
-            <h3>K-Pop Entertainment</h3>
-        </a>
-    </div>
-
-    <div class="thumbnail" data-category="muziek">
-        <a href="video1.html">
-            <img src="https://img.youtube.com/vi/l482T0yNkeo/0.jpg">
-            <h3>Rock Muziek</h3>
-        </a>
-    </div>
-
-    <div class="thumbnail" data-category="hiphop">
-        <a href="video2.html">
-            <img src="https://img.youtube.com/vi/3JZ_D3ELwOQ/0.jpg">
-            <h3>Hip Hop</h3>
-        </a>
-    </div>
+<div id="scoreBoard">
+    Speler 1: <span id="score1">0</span> |
+    Speler 2: <span id="score2">0</span> |
+    Level: <span id="level">1</span>
 </div>
 
-<footer>
-    © 2026 Mijn Website
-</footer>
+<div id="gameArea"></div>
+
+<audio id="bgMusic" loop>
+<source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+let score1=0, score2=0;
+let level=1;
+let gameInterval;
+let enemyInterval;
+let player1, player2;
+let difficulty;
+let speed=2;
+
+/* START GAME */
+function startGame(){
+    const area=document.getElementById("gameArea");
+    area.innerHTML="";
+    score1=0; score2=0; level=1;
+    updateUI();
+
+    difficulty=document.getElementById("difficulty").value;
+
+    player1=createPlayer(50,"player");
+    player2=createPlayer(150,"player");
+
+    area.appendChild(player1);
+    area.appendChild(player2);
+
+    enemyInterval=setInterval(spawnEnemy,difficulty);
+}
+
+/* CREATE PLAYER */
+function createPlayer(x,cls){
+    const p=document.createElement("div");
+    p.className=cls;
+    p.style.left=x+"px";
+    p.style.top="200px";
+    return p;
+}
+
+/* SPAWN ENEMY */
+function spawnEnemy(){
+    const area=document.getElementById("gameArea");
+    const enemy=document.createElement("div");
+    enemy.className="enemy";
+    enemy.style.left=Math.random()* (area.clientWidth-40)+"px";
+    enemy.style.top="0px";
+    area.appendChild(enemy);
+
+    let fall=setInterval(()=>{
+        enemy.style.top=enemy.offsetTop+speed+"px";
+
+        if(enemy.offsetTop>area.clientHeight){
+            area.removeChild(enemy);
+            clearInterval(fall);
+        }
+
+        if(checkCollision(enemy,player1)){
+            score1++;
+            nextLevel();
+            area.removeChild(enemy);
+            clearInterval(fall);
+        }
+
+        if(checkCollision(enemy,player2)){
+            score2++;
+            nextLevel();
+            area.removeChild(enemy);
+            clearInterval(fall);
+        }
+
+    },20);
+}
+
+/* COLLISION */
+function checkCollision(a,b){
+    return !(
+        a.offsetTop > b.offsetTop+40 ||
+        a.offsetTop+40 < b.offsetTop ||
+        a.offsetLeft > b.offsetLeft+40 ||
+        a.offsetLeft+40 < b.offsetLeft
+    );
+}
+
+/* LEVEL SYSTEM */
+function nextLevel(){
+    if((score1+score2)%5===0){
+        level++;
+        speed+=1;
+        updateUI();
+    }
+}
+
+function updateUI(){
+    document.getElementById("score1").innerText=score1;
+    document.getElementById("score2").innerText=score2;
+    document.getElementById("level").innerText=level;
+}
+
+/* CONTROLS */
+document.addEventListener("keydown",e=>{
+    if(!player1) return;
+
+    if(e.key==="a") player1.style.left=player1.offsetLeft-20+"px";
+    if(e.key==="d") player1.style.left=player1.offsetLeft+20+"px";
+
+    if(e.key==="ArrowLeft") player2.style.left=player2.offsetLeft-20+"px";
+    if(e.key==="ArrowRight") player2.style.left=player2.offsetLeft+20+"px";
+});
+
+/* MUSIC */
+function toggleMusic(){
+    const music=document.getElementById("bgMusic");
+    if(music.paused){
+        music.play();
+    }else{
+        music.pause();
+    }
+}
+</script>
 
 </body>
 </html>
