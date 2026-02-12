@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>CyberGame 3D</title>
+<title>CyberGame: Neon Oblivion</title>
 <style>
 body { margin:0; overflow:hidden; background:black; }
 #ui {
@@ -11,134 +11,232 @@ body { margin:0; overflow:hidden; background:black; }
     left:20px;
     color:#0ff;
     font-family:Arial;
+    text-shadow:0 0 10px #0ff;
+    z-index: 10;
+}
+button { 
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 10px;
+    font-size:16px;
+    background:#0ff;
+    border:none;
+    cursor:pointer;
+    color:#000;
 }
 </style>
 </head>
 <body>
-
 <div id="ui">
 HP: <span id="hp">100</span><br>
 Score: <span id="score">0</span><br>
-Klik om te starten
+Gun Level: <span id="gun">1</span>
 </div>
+<button id="startBtn">CLICK TO START</button>
 
 <script type="module">
+
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160/build/three.module.js';
 import { PointerLockControls } from 'https://cdn.jsdelivr.net/npm/three@0.160/examples/jsm/controls/PointerLockControls.js';
+import { EffectComposer } from 'https://cdn.jsdelivr.net/npm/three@0.160/examples/jsm/postprocessing/EffectComposer.js';
+import { RenderPass } from 'https://cdn.jsdelivr.net/npm/three@0.160/examples/jsm/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'https://cdn.jsdelivr.net/npm/three@0.160/examples/jsm/postprocessing/UnrealBloomPass.js';
 
 let scene = new THREE.Scene();
-scene.background = new THREE.Color(0x000000);
+scene.fog = new THREE.Fog(0x000000, 20, 200);
 
 let camera = new THREE.PerspectiveCamera(75, innerWidth/innerHeight, 0.1, 1000);
-let renderer = new THREE.WebGLRenderer();
+let renderer = new THREE.WebGLRenderer({antialias:true});
 renderer.setSize(innerWidth, innerHeight);
 document.body.appendChild(renderer.domElement);
 
+let composer = new EffectComposer(renderer);
+composer.addPass(new RenderPass(scene, camera));
+composer.addPass(new UnrealBloomPass(new THREE.Vector2(innerWidth,innerHeight),1.5,0.4,0.85));
+
 let controls = new PointerLockControls(camera, document.body);
-document.body.addEventListener("click", () => controls.lock());
 
-let light = new THREE.PointLight(0x00ffff, 2, 100);
-light.position.set(0,10,0);
-scene.add(light);
-
-let floorGeometry = new THREE.PlaneGeometry(200,200);
-let floorMaterial = new THREE.MeshStandardMaterial({ color:0x111111 });
-let floor = new THREE.Mesh(floorGeometry,floorMaterial);
-floor.rotation.x = -Math.PI/2;
-scene.add(floor);
+const startBtn = document.getElementById("startBtn");
+startBtn.addEventListener("click", () => {
+    controls.lock();
+    startBtn.style.display = "none";
+});
 
 camera.position.y = 2;
 
-let enemies = [];
-let bullets = [];
-let hp = 100;
-let score = 0;
+let neonLight = new THREE.PointLight(0x00ffff, 3, 100);
+neonLight.position.set(0,10,0);
+scene.add(neonLight);
 
-function spawnEnemy(){
-    let geo = new THREE.BoxGeometry(2,2,2);
-    let mat = new THREE.MeshStandardMaterial({color:0xff0000});
-    let enemy = new THREE.Mesh(geo,mat);
-    enemy.position.set(
-        Math.random()*100-50,
-        1,
-        Math.random()*-100
+let floor = new THREE.Mesh(
+    new THREE.PlaneGeometry(500,500),
+    new THREE.MeshStandardMaterial({color:0x111111})
+);
+floor.rotation.x = -Math.PI/2;
+scene.add(floor);
+
+// Create a simple neon city
+for(let i=0;i<100;i++){
+    let h = Math.random()*20 + 5;
+    let building = new THREE.Mesh(
+        new THREE.BoxGeometry(5,h,5),
+        new THREE.MeshStandardMaterial({color:0x111122, emissive:0x00ffff, emissiveIntensity:0.3})
     );
+    building.position.set(Math.random()*200-100,h/2,Math.random()*200-100);
+    scene.add(building);
+}
+
+let enemies = [], bullets = [], particles = [];
+let boss = null;
+let hp = 100, score = 0, gunLevel = 1;
+
+// Enemy spawn
+function spawnEnemy(){
+    let enemy = new THREE.Mesh(
+        new THREE.BoxGeometry(2,2,2),
+        new THREE.MeshStandardMaterial({color:0xff00ff, emissive:0xff00ff, emissiveIntensity:0.5})
+    );
+    enemy.position.set(Math.random()*100-50,1,Math.random()*-100);
     scene.add(enemy);
     enemies.push(enemy);
 }
-setInterval(spawnEnemy,2000);
+setInterval(spawnEnemy, 2000);
 
-function shoot(){
-    let geo = new THREE.SphereGeometry(0.2);
-    let mat = new THREE.MeshBasicMaterial({color:0xffff00});
-    let bullet = new THREE.Mesh(geo,mat);
-    bullet.position.copy(camera.position);
-    bullet.velocity = new THREE.Vector3();
-    camera.getWorldDirection(bullet.velocity);
-    bullet.velocity.multiplyScalar(1);
-    scene.add(bullet);
-    bullets.push(bullet);
+// Boss spawn
+function spawnBoss(){
+    boss = new THREE.Mesh(
+        new THREE.BoxGeometry(10,10,10),
+        new THREE.MeshStandardMaterial({color:0xff0000, emissive:0xaa0000, emissiveIntensity:0.7})
+    );
+    boss.position.set(0,5,-50);
+    boss.hp = 300;
+    scene.add(boss);
 }
 
+// Shoot
+function shoot(){
+    for(let i=0;i<gunLevel;i++){
+        let bullet = new THREE.Mesh(
+            new THREE.SphereGeometry(0.2),
+            new THREE.MeshBasicMaterial({color:0xffff00})
+        );
+        bullet.position.copy(camera.position);
+        bullet.velocity = new THREE.Vector3();
+        camera.getWorldDirection(bullet.velocity);
+        bullet.velocity.multiplyScalar(1.5);
+        scene.add(bullet);
+        bullets.push(bullet);
+    }
+}
 document.addEventListener("mousedown", shoot);
 
-let move = {forward:false, back:false, left:false, right:false};
-
-document.addEventListener("keydown", e=>{
-    if(e.code==="KeyW") move.forward=true;
-    if(e.code==="KeyS") move.back=true;
-    if(e.code==="KeyA") move.left=true;
-    if(e.code==="KeyD") move.right=true;
+// Controls
+let move={f:false,b:false,l:false,r:false};
+document.addEventListener("keydown",e=>{
+    if(e.code==="KeyW") move.f=true;
+    if(e.code==="KeyS") move.b=true;
+    if(e.code==="KeyA") move.l=true;
+    if(e.code==="KeyD") move.r=true;
 });
-document.addEventListener("keyup", e=>{
-    if(e.code==="KeyW") move.forward=false;
-    if(e.code==="KeyS") move.back=false;
-    if(e.code==="KeyA") move.left=false;
-    if(e.code==="KeyD") move.right=false;
+document.addEventListener("keyup",e=>{
+    if(e.code==="KeyW") move.f=false;
+    if(e.code==="KeyS") move.b=false;
+    if(e.code==="KeyA") move.l=false;
+    if(e.code==="KeyD") move.r=false;
 });
 
+// Particle explosion
+function explosion(pos){
+    for(let i=0;i<20;i++){
+        let p = new THREE.Mesh(
+            new THREE.SphereGeometry(0.1),
+            new THREE.MeshBasicMaterial({color:0xffaa00})
+        );
+        p.position.copy(pos);
+        p.velocity = new THREE.Vector3(
+            Math.random()-0.5,
+            Math.random()-0.5,
+            Math.random()-0.5
+        );
+        scene.add(p);
+        particles.push(p);
+    }
+}
+
+// Animate
 function animate(){
     requestAnimationFrame(animate);
 
-    if(move.forward) controls.moveForward(0.2);
-    if(move.back) controls.moveForward(-0.2);
-    if(move.left) controls.moveRight(-0.2);
-    if(move.right) controls.moveRight(0.2);
+    if(move.f) controls.moveForward(0.3);
+    if(move.b) controls.moveForward(-0.3);
+    if(move.l) controls.moveRight(-0.3);
+    if(move.r) controls.moveRight(0.3);
 
     bullets.forEach((b,i)=>{
         b.position.add(b.velocity);
 
         enemies.forEach((e,ei)=>{
             if(b.position.distanceTo(e.position)<1.5){
+                explosion(e.position);
                 scene.remove(e);
                 scene.remove(b);
                 enemies.splice(ei,1);
                 bullets.splice(i,1);
                 score+=10;
-                document.getElementById("score").innerText=score;
+                if(score%100===0) gunLevel++;
             }
         });
-    });
 
-    enemies.forEach(e=>{
-        e.position.z += 0.05;
-        if(e.position.distanceTo(camera.position)<2){
-            hp-=1;
-            document.getElementById("hp").innerText=hp;
+        if(boss && b.position.distanceTo(boss.position)<6){
+            boss.hp -=5;
+            explosion(b.position);
+            scene.remove(b);
+            bullets.splice(i,1);
+            if(boss.hp <=0){
+                scene.remove(boss);
+                boss=null;
+                score+=500;
+            }
         }
     });
 
-    renderer.render(scene,camera);
+    enemies.forEach(e=>{
+        e.lookAt(camera.position);
+        e.translateZ(0.05);
+        if(e.position.distanceTo(camera.position)<2){
+            hp -=0.2;
+        }
+    });
+
+    particles.forEach((p,i)=>{
+        p.position.add(p.velocity);
+        p.scale.multiplyScalar(0.95);
+        if(p.scale.x<0.1){
+            scene.remove(p);
+            particles.splice(i,1);
+        }
+    });
+
+    if(score>300 && !boss) spawnBoss();
+
+    document.getElementById("hp").innerText=Math.floor(hp);
+    document.getElementById("score").innerText=score;
+    document.getElementById("gun").innerText=gunLevel;
+
+    composer.render();
 }
 animate();
 
+// Resize
 window.addEventListener("resize",()=>{
     camera.aspect = innerWidth/innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(innerWidth,innerHeight);
+    composer.setSize(innerWidth,innerHeight);
 });
-</script>
 
+</script>
 </body>
 </html>
-
