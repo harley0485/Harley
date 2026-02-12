@@ -1,1 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>CyberGame 3D</title>
+<style>
+body { margin:0; overflow:hidden; background:black; }
+#ui {
+    position:absolute;
+    top:20px;
+    left:20px;
+    color:#0ff;
+    font-family:Arial;
+}
+</style>
+</head>
+<body>
+
+<div id="ui">
+HP: <span id="hp">100</span><br>
+Score: <span id="score">0</span><br>
+Klik om te starten
+</div>
+
+<script type="module">
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160/build/three.module.js';
+import { PointerLockControls } from 'https://cdn.jsdelivr.net/npm/three@0.160/examples/jsm/controls/PointerLockControls.js';
+
+let scene = new THREE.Scene();
+scene.background = new THREE.Color(0x000000);
+
+let camera = new THREE.PerspectiveCamera(75, innerWidth/innerHeight, 0.1, 1000);
+let renderer = new THREE.WebGLRenderer();
+renderer.setSize(innerWidth, innerHeight);
+document.body.appendChild(renderer.domElement);
+
+let controls = new PointerLockControls(camera, document.body);
+document.body.addEventListener("click", () => controls.lock());
+
+let light = new THREE.PointLight(0x00ffff, 2, 100);
+light.position.set(0,10,0);
+scene.add(light);
+
+let floorGeometry = new THREE.PlaneGeometry(200,200);
+let floorMaterial = new THREE.MeshStandardMaterial({ color:0x111111 });
+let floor = new THREE.Mesh(floorGeometry,floorMaterial);
+floor.rotation.x = -Math.PI/2;
+scene.add(floor);
+
+camera.position.y = 2;
+
+let enemies = [];
+let bullets = [];
+let hp = 100;
+let score = 0;
+
+function spawnEnemy(){
+    let geo = new THREE.BoxGeometry(2,2,2);
+    let mat = new THREE.MeshStandardMaterial({color:0xff0000});
+    let enemy = new THREE.Mesh(geo,mat);
+    enemy.position.set(
+        Math.random()*100-50,
+        1,
+        Math.random()*-100
+    );
+    scene.add(enemy);
+    enemies.push(enemy);
+}
+setInterval(spawnEnemy,2000);
+
+function shoot(){
+    let geo = new THREE.SphereGeometry(0.2);
+    let mat = new THREE.MeshBasicMaterial({color:0xffff00});
+    let bullet = new THREE.Mesh(geo,mat);
+    bullet.position.copy(camera.position);
+    bullet.velocity = new THREE.Vector3();
+    camera.getWorldDirection(bullet.velocity);
+    bullet.velocity.multiplyScalar(1);
+    scene.add(bullet);
+    bullets.push(bullet);
+}
+
+document.addEventListener("mousedown", shoot);
+
+let move = {forward:false, back:false, left:false, right:false};
+
+document.addEventListener("keydown", e=>{
+    if(e.code==="KeyW") move.forward=true;
+    if(e.code==="KeyS") move.back=true;
+    if(e.code==="KeyA") move.left=true;
+    if(e.code==="KeyD") move.right=true;
+});
+document.addEventListener("keyup", e=>{
+    if(e.code==="KeyW") move.forward=false;
+    if(e.code==="KeyS") move.back=false;
+    if(e.code==="KeyA") move.left=false;
+    if(e.code==="KeyD") move.right=false;
+});
+
+function animate(){
+    requestAnimationFrame(animate);
+
+    if(move.forward) controls.moveForward(0.2);
+    if(move.back) controls.moveForward(-0.2);
+    if(move.left) controls.moveRight(-0.2);
+    if(move.right) controls.moveRight(0.2);
+
+    bullets.forEach((b,i)=>{
+        b.position.add(b.velocity);
+
+        enemies.forEach((e,ei)=>{
+            if(b.position.distanceTo(e.position)<1.5){
+                scene.remove(e);
+                scene.remove(b);
+                enemies.splice(ei,1);
+                bullets.splice(i,1);
+                score+=10;
+                document.getElementById("score").innerText=score;
+            }
+        });
+    });
+
+    enemies.forEach(e=>{
+        e.position.z += 0.05;
+        if(e.position.distanceTo(camera.position)<2){
+            hp-=1;
+            document.getElementById("hp").innerText=hp;
+        }
+    });
+
+    renderer.render(scene,camera);
+}
+animate();
+
+window.addEventListener("resize",()=>{
+    camera.aspect = innerWidth/innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(innerWidth,innerHeight);
+});
+</script>
+
+</body>
+</html>
 
