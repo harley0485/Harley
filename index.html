@@ -1,228 +1,119 @@
-<!DOCTYPE html>
-<html lang="nl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VideoHub Template</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, Helvetica, sans-serif;
-        }
-
-        body {
-            background-color: #111;
-            color: #fff;
-        }
-
-        header {
-            background-color: #000;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 40px;
-            border-bottom: 3px solid #f90;
-        }
-
-        .logo {
-            font-size: 28px;
-            font-weight: bold;
-        }
-
-        .logo span {
-            background-color: #f90;
-            color: #000;
-            padding: 4px 8px;
-            border-radius: 4px;
-        }
-
-        nav ul {
-            list-style: none;
-            display: flex;
-            gap: 20px;
-        }
-
-        nav ul li a {
-            text-decoration: none;
-            color: #fff;
-            font-weight: bold;
-        }
-
-        .search-bar {
-            margin: 20px auto;
-            text-align: center;
-        }
-
-        .search-bar input {
-            width: 60%;
-            padding: 10px;
-            border-radius: 4px 0 0 4px;
-            border: none;
-        }
-
-        .search-bar button {
-            padding: 10px 15px;
-            border: none;
-            background-color: #f90;
-            color: #000;
-            font-weight: bold;
-            cursor: pointer;
-            border-radius: 0 4px 4px 0;
-        }
-
-        .container {
-            width: 90%;
-            margin: auto;
-            padding-bottom: 40px;
-        }
-
-        .video-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
-        }
-
-        .video-card {
-            background-color: #1c1c1c;
-            border-radius: 8px;
-            overflow: hidden;
-            transition: transform 0.3s;
-            cursor: pointer;
-        }
-
-        .video-card:hover {
-            transform: scale(1.03);
-        }
-
-        .thumbnail img {
-            width: 100%;
-            height: 160px;
-            object-fit: cover;
-            display: block;
-        }
-
-        .video-info {
-            padding: 10px;
-        }
-
-        .video-title {
-            font-size: 14px;
-            margin-bottom: 5px;
-        }
-
-        .video-meta {
-            font-size: 12px;
-            color: #aaa;
-        }
-
-        /* Embedded Player */
-        .player-container {
-            width: 90%;
-            margin: 30px auto;
-            display: none;
-        }
-
-        .player-container iframe {
-            width: 100%;
-            height: 500px;
-            border-radius: 8px;
-        }
-
-        footer {
-            background-color: #000;
-            padding: 20px;
-            text-align: center;
-            border-top: 2px solid #f90;
-            font-size: 14px;
-            color: #aaa;
-        }
-    </style>
-</head>
-<body>
-
-<header>
-    <div class="logo">femboy<span>Hub</span></div>
-    <nav>
-        <ul>
-            <li><a href="#">Home</a></li>
-            <li><a href="#">Categories</a></li>
-            <li><a href="#">Trending</a></li>
-            <li><a href="#">Upload</a></li>
-        </ul>
-    </nav>
-</header>
-
-<div class="search-bar">
-    <input type="text" placeholder="Zoek video's...">
-    <button>Zoeken</button>
-</div>
-
-<!-- Embedded Video Player -->
-<div class="player-container" id="playerContainer">
-    <iframe id="videoPlayer" src="" frameborder="0" allowfullscreen></iframe>
-</div>
-
-<div class="container">
-    <div class="video-grid">
-
-        <div class="video-card" onclick="playVideo('dQw4w9WgXcQ')">
-            <div class="thumbnail">
-                <img src="https://img.youtube.com/vi/ekOvwI68MOw/hqdefault.jpg" alt="Video 1">
-            </div>
-            <div class="video-info">
-                <div class="video-title">mommyfemboy</div>
-                <div class="video-meta">1.2M weergaven • 2 dagen geleden</div>
-            </div>
-        </div>
-
-        <div class="video-card" onclick="playVideo('9bZkp7q19f0')">
-            <div class="thumbnail">
-                <img src="https://img.youtube.com/vi/ekOvwI68MOw/hqdefault.jpg" alt="Video 2">
-            </div>
-            <div class="video-info">
-                <div class="video-title">femboy hot</div>
-                <div class="video-meta">850K weergaven • 1 week geleden</div>
-            </div>
-        </div>
-
-        <div class="video-card" onclick="playVideo('l482T0yNkeo')">
-            <div class="thumbnail">
-                <img src="https://img.youtube.com/vi/l482T0yNkeo/hqdefault.jpg" alt="Video 3">
-            </div>
-            <div class="video-info">
-                <div class="video-title">femboy6.7</div>
-                <div class="video-meta">540K weergaven • 3 weken geleden</div>
-            </div>
-        </div>
-
-        <div class="video-card" onclick="playVideo('3JZ_D3ELwOQ')">
-            <div class="thumbnail">
-                <img src="https://img.youtube.com/vi/3JZ_D3ELwOQ/hqdefault.jpg" alt="Video 4">
-            </div>
-            <div class="video-info">
-                <div class="video-title">femboy hot</div>
-                <div class="video-meta">2.4M weergaven • 1 maand geleden</div>
-            </div>
-        </div>
-
-    </div>
-</div>
-
-<footer>
-    © 2026 VideoHub - Alle rechten voorbehouden.
-</footer>
-
-<script>
-    function playVideo(videoId) {
-        const player = document.getElementById('videoPlayer');
-        const container = document.getElementById('playerContainer');
-        player.src = "https://www.youtube.com/embed/" + videoId + "?autoplay=1";
-        container.style.display = "block";
-        window.scrollTo({ top: container.offsetTop - 20, behavior: 'smooth' });
+&lt;!DOCTYPE html&gt;
+&lt;html lang="nl"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8" /&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1" /&gt;
+  &lt;title&gt;Femboy Hub&lt;/title&gt;
+  &lt;style&gt;
+    /* Reset en basis */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
-</script>
+    body {
+      background: #121212;
+      color: #f0f0f0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      align-items: center;
+      padding: 20px;
+    }
+    header {
+      margin-bottom: 30px;
+      text-align: center;
+    }
+    header h1 {
+      font-size: 3rem;
+      color: #ff6fcf;
+      text-shadow: 0 0 10px #ff6fcf;
+      letter-spacing: 2px;
+    }
+    form {
+      display: flex;
+      width: 100%;
+      max-width: 600px;
+      border-radius: 30px;
+      overflow: hidden;
+      box-shadow: 0 0 15px #ff6fcf;
+      margin-bottom: 30px;
+    }
+    input[type="text"] {
+      flex-grow: 1;
+      padding: 15px 20px;
+      font-size: 1.2rem;
+      border: none;
+      outline: none;
+      background: #292929;
+      color: #fff;
+    }
+    button {
+      background: #ff6fcf;
+      border: none;
+      padding: 0 25px;
+      cursor: pointer;
+      font-size: 1.2rem;
+      color: #121212;
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background: #e052b3;
+    }
+    iframe {
+      width: 100%;
+      max-width: 900px;
+      height: 600px;
+      border: none;
+      box-shadow: 0 0 20px #ff6fcf;
+      border-radius: 10px;
+    }
+    footer {
+      margin-top: auto;
+      padding: 10px;
+      color: #666;
+      font-size: 0.9rem;
+    }
+    @media (max-width: 700px) {
+      iframe {
+        height: 400px;
+      }
+      header h1 {
+        font-size: 2.2rem;
+      }
+    }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;header&gt;
+    <h1>Femboy Hub</h1>
+  &lt;/header&gt;
 
-</body>
-</html>
+  &lt;form id="searchForm" target="browserFrame" action="https://www.google.com/search" method="GET"&gt;
+    &lt;input 
+      type="text" 
+      name="q" 
+      placeholder="Zoek video's en meer..." 
+      aria-label="Zoekbalk"
+      required
+    /&gt;
+    &lt;button type="submit"&gt;Zoek&lt;/button&gt;
+  &lt;/form&gt;
+
+  &lt;iframe name="browserFrame" src="https://www.google.com" title="Ingebouwde browser"&gt;&lt;/iframe&gt;
+
+  &lt;footer&gt;
+    © 2024 Femboy Hub
+  &lt;/footer&gt;
+
+  &lt;script&gt;
+    // Optioneel: voeg hier JavaScript toe voor extra functionaliteit
+    // Bijvoorbeeld om automatisch "video" toe te voegen aan zoekopdrachten als je alleen video zoekt:
+    const form = document.getElementById('searchForm');
+    form.addEventListener('submit', e =&gt; {
+      const input = form.querySelector('input[name="q"]');
+      // Als de zoekopdracht niet expliciet 'video' bevat, voeg het toe
+      if (!input.value.toLowerCase().includes('video')) {
+        input.value += ' video';
+      }
