@@ -110,7 +110,8 @@ iframe {
 </div>
 
 <script>
-const ADMIN_PASSWORD = "mijnwachtwoord123"; // ← HIER je eigen wachtwoord instellen
+<script>
+const ADMIN_PASSWORD = "mijnwachtwoord123"; // ← Verander dit wachtwoord
 
 let videos = JSON.parse(localStorage.getItem("videos")) || [];
 let likedVideos = JSON.parse(localStorage.getItem("likedVideos")) || {};
@@ -145,7 +146,6 @@ function login() {
 }
 
 function logout() {
-    isLoggedIn = false;
     localStorage.setItem("isLoggedIn", "false");
     location.reload();
 }
@@ -161,6 +161,17 @@ function renderVideos() {
     grid.innerHTML = "";
 
     videos.forEach((video, index) => {
+
+        let deleteButton = "";
+        if (isLoggedIn) {
+            deleteButton = `
+                <button onclick="deleteVideo(${index})" 
+                        style="background:red; margin-left:10px;">
+                    🗑 Verwijderen
+                </button>
+            `;
+        }
+
         grid.innerHTML += `
             <div class="video-card">
                 <img src="https://img.youtube.com/vi/${video.id}/0.jpg" 
@@ -170,6 +181,7 @@ function renderVideos() {
                     <button onclick="likeVideo(${index})">
                         ❤️ ${video.likes || 0}
                     </button>
+                    ${deleteButton}
                 </div>
             </div>
         `;
@@ -199,6 +211,16 @@ function likeVideo(index) {
     renderVideos();
 }
 
+function deleteVideo(index) {
+    if (!isLoggedIn) return;
+
+    if (confirm("Weet je zeker dat je deze video wilt verwijderen?")) {
+        videos.splice(index, 1);
+        saveVideos();
+        renderVideos();
+    }
+}
+
 document.getElementById("videoForm").addEventListener("submit", function(e) {
     e.preventDefault();
 
@@ -222,6 +244,7 @@ document.getElementById("videoForm").addEventListener("submit", function(e) {
 renderVideos();
 checkLogin();
 </script>
+
 
 
 </body>
