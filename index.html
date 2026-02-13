@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Video Platform</title>
+<title>Mijn Video Platform</title>
+
 <style>
 body {
     margin: 0;
@@ -13,93 +14,149 @@ body {
 }
 
 header {
-    background-color: #000;
+    background-color: black;
     padding: 15px 30px;
-    display: flex;
-    align-items: center;
-}
-
-.logo {
-    font-size: 28px;
+    font-size: 24px;
     font-weight: bold;
 }
 
-.logo span {
-    background-color: orange;
-    color: black;
-    padding: 4px 8px;
-    border-radius: 4px;
+header span {
+    color: orange;
 }
 
 .container {
     padding: 20px;
 }
 
+form {
+    margin-bottom: 30px;
+}
+
+input {
+    padding: 10px;
+    margin: 5px;
+    width: 250px;
+}
+
+button {
+    padding: 10px 15px;
+    background: orange;
+    border: none;
+    cursor: pointer;
+}
+
 .video-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 15px;
 }
 
 .video-card {
     background-color: #1c1c1c;
-    border-radius: 8px;
-    overflow: hidden;
-    transition: transform 0.2s;
+    cursor: pointer;
+    transition: 0.3s;
 }
 
 .video-card:hover {
-    transform: scale(1.03);
+    transform: scale(1.05);
 }
 
-.video-card iframe {
+.video-card img {
     width: 100%;
-    height: 200px;
-}
-
-.video-info {
-    padding: 10px;
 }
 
 .video-title {
-    font-size: 16px;
-    font-weight: bold;
+    padding: 10px;
+}
+
+.player {
+    margin-top: 30px;
+    text-align: center;
+}
+
+iframe {
+    width: 80%;
+    height: 450px;
+    border: none;
 }
 </style>
 </head>
 <body>
 
-<header>
-    <div class="logo">femboy<span>hub</span></div>
-</header>
+<header>Mijn<span>Video</span>Platform</header>
 
 <div class="container">
-    <div class="video-grid">
 
-        <!-- Video 1 -->
-        <div class="video-card">
-            <iframe src="https://www.youtube.com/embed/VIDEO_ID_1"
-                frameborder="0"
-                allowfullscreen>
-            </iframe>
-            <div class="video-info">
-                <div class="video-title">Titel van de video 1</div>
-            </div>
-        </div>
+    <h2>Video toevoegen</h2>
 
-        <!-- Video 2 -->
-        <div class="video-card">
-            <iframe src="https://www.youtube.com/embed/VIDEO_ID_2"
-                frameborder="0"
-                allowfullscreen>
-            </iframe>
-            <div class="video-info">
-                <div class="video-title">Titel van de video 2</div>
-            </div>
-        </div>
+    <form id="videoForm">
+        <input type="text" id="title" placeholder="Titel" required>
+        <input type="text" id="youtubeLink" placeholder="YouTube link" required>
+        <button type="submit">Toevoegen</button>
+    </form>
 
-    </div>
+    <div class="video-grid" id="videoGrid"></div>
+
+    <div class="player" id="player"></div>
+
 </div>
+
+<script>
+let videos = JSON.parse(localStorage.getItem("videos")) || [];
+
+function saveVideos() {
+    localStorage.setItem("videos", JSON.stringify(videos));
+}
+
+function extractYouTubeID(url) {
+    let regExp = /(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&]+)/;
+    let match = url.match(regExp);
+    return match ? match[1] : null;
+}
+
+function renderVideos() {
+    const grid = document.getElementById("videoGrid");
+    grid.innerHTML = "";
+
+    videos.forEach((video, index) => {
+        grid.innerHTML += `
+            <div class="video-card" onclick="playVideo('${video.id}')">
+                <img src="https://img.youtube.com/vi/${video.id}/0.jpg">
+                <div class="video-title">${video.title}</div>
+            </div>
+        `;
+    });
+}
+
+function playVideo(videoId) {
+    document.getElementById("player").innerHTML = `
+        <iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1"
+        allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    `;
+}
+
+document.getElementById("videoForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const title = document.getElementById("title").value;
+    const link = document.getElementById("youtubeLink").value;
+
+    const videoId = extractYouTubeID(link);
+
+    if (!videoId) {
+        alert("Ongeldige YouTube link!");
+        return;
+    }
+
+    videos.unshift({ title: title, id: videoId });
+    saveVideos();
+    renderVideos();
+
+    this.reset();
+});
+
+renderVideos();
+</script>
 
 </body>
 </html>
