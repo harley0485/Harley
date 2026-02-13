@@ -1,117 +1,209 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-    <meta charset="UTF-8">
-    <title>Mijn Video Platform</title>
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #111;
-            color: white;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VideoHub</title>
 
-        header {
-            background-color: #000;
-            padding: 15px;
-            font-size: 24px;
-            font-weight: bold;
-            color: orange;
-        }
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
 
-        .container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 15px;
-            padding: 20px;
-        }
+body {
+    background-color: #0f0f0f;
+    color: white;
+}
 
-        .video-card {
-            background-color: #1c1c1c;
-            border-radius: 8px;
-            overflow: hidden;
-            cursor: pointer;
-            transition: 0.3s;
-        }
+/* HEADER */
+header {
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 30px;
+}
 
-        .video-card:hover {
-            transform: scale(1.05);
-        }
+.logo {
+    font-size: 26px;
+    font-weight: bold;
+}
 
-        .video-card video {
-            width: 100%;
-            display: block;
-        }
+.logo span {
+    color: orange;
+}
 
-        .video-title {
-            padding: 10px;
-            font-size: 14px;
-        }
+.search-box input {
+    padding: 8px 12px;
+    border-radius: 4px;
+    border: none;
+    width: 250px;
+}
 
-        .player-container {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.9);
-            justify-content: center;
-            align-items: center;
-        }
+.categories {
+    background: #1a1a1a;
+    padding: 10px 30px;
+    display: flex;
+    gap: 20px;
+    font-size: 14px;
+}
 
-        .player-container video {
-            width: 80%;
-            max-height: 80%;
-        }
+.categories span {
+    cursor: pointer;
+    transition: 0.2s;
+}
 
-        .close-btn {
-            position: absolute;
-            top: 20px;
-            right: 40px;
-            font-size: 30px;
-            cursor: pointer;
-        }
-    </style>
+.categories span:hover {
+    color: orange;
+}
+
+/* VIDEO GRID */
+.container {
+    padding: 30px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.video-card {
+    background: #1c1c1c;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.video-card:hover {
+    transform: scale(1.03);
+}
+
+.thumbnail {
+    position: relative;
+}
+
+.thumbnail video {
+    width: 100%;
+    display: block;
+}
+
+.duration {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    background: rgba(0,0,0,0.7);
+    padding: 3px 6px;
+    font-size: 12px;
+    border-radius: 4px;
+}
+
+.video-info {
+    padding: 10px;
+}
+
+.video-title {
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+.video-meta {
+    font-size: 12px;
+    color: #aaa;
+}
+
+/* FULLSCREEN PLAYER */
+.player-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.95);
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.player-overlay video {
+    width: 80%;
+    max-height: 80%;
+}
+
+.close-btn {
+    position: absolute;
+    top: 20px;
+    right: 40px;
+    font-size: 30px;
+    cursor: pointer;
+}
+</style>
 </head>
+
 <body>
 
-<header>Mijn Video Platform</header>
+<header>
+    <div class="logo">Video<span>Hub</span></div>
+    <div class="search-box">
+        <input type="text" placeholder="Zoek video...">
+    </div>
+</header>
+
+<div class="categories">
+    <span>Trending</span>
+    <span>Nieuw</span>
+    <span>Populair</span>
+    <span>HD</span>
+</div>
 
 <div class="container">
 
     <!-- VIDEO 1 -->
     <div class="video-card" onclick="openVideo('video1.mp4')">
-        <video src="video1.mp4" muted></video>
-        <div class="video-title">Video Titel 1</div>
+        <div class="thumbnail">
+            <video src="video1.mp4" muted></video>
+            <div class="duration">4:32</div>
+        </div>
+        <div class="video-info">
+            <div class="video-title">Mijn Video 1</div>
+            <div class="video-meta">120K views • 2 dagen geleden</div>
+        </div>
     </div>
 
     <!-- VIDEO 2 -->
     <div class="video-card" onclick="openVideo('video2.mp4')">
-        <video src="video2.mp4" muted></video>
-        <div class="video-title">Video Titel 2</div>
+        <div class="thumbnail">
+            <video src="video2.mp4" muted></video>
+            <div class="duration">7:15</div>
+        </div>
+        <div class="video-info">
+            <div class="video-title">Mijn Video 2</div>
+            <div class="video-meta">89K views • 1 week geleden</div>
+        </div>
     </div>
 
 </div>
 
-<!-- Fullscreen Player -->
-<div class="player-container" id="player">
-    <span class="close-btn" onclick="closeVideo()">✖</span>
+<!-- FULLSCREEN PLAYER -->
+<div class="player-overlay" id="player">
+    <div class="close-btn" onclick="closeVideo()">✖</div>
     <video id="mainVideo" controls autoplay></video>
 </div>
 
 <script>
-    function openVideo(src) {
-        const player = document.getElementById("player");
-        const video = document.getElementById("mainVideo");
-        video.src = src;
-        player.style.display = "flex";
-    }
+function openVideo(src) {
+    const player = document.getElementById("player");
+    const video = document.getElementById("mainVideo");
+    video.src = src;
+    player.style.display = "flex";
+}
 
-    function closeVideo() {
-        const player = document.getElementById("player");
-        const video = document.getElementById("mainVideo");
-        video.pause();
-        video.src = "";
-        player.style.display = "none";
-    }
+function closeVideo() {
+    const player = document.getElementById("player");
+    const video = document.getElementById("mainVideo");
+    video.pause();
+    video.src = "";
+    player.style.display = "none";
+}
 </script>
 
 </body>
