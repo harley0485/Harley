@@ -86,10 +86,15 @@ iframe {
 <header>Mijn<span>Video</span>Platform</header>
 
 <div class="container">
+<div id="loginBox">
+    <h2>Admin Login</h2>
+    <input type="password" id="adminPassword" placeholder="Wachtwoord">
+    <button onclick="login()">Login</button>
+</div>
 
     <h2>Video toevoegen</h2>
 
-    <form id="videoForm">
+    <form id="videoForm" style="display:none;">
         <input type="text" id="title" placeholder="Titel" required>
         <input type="text" id="youtubeLink" placeholder="YouTube link" required>
         <button type="submit">Toevoegen</button>
@@ -102,63 +107,11 @@ iframe {
 </div>
 
 <script>
-let videos = JSON.parse(localStorage.getItem("videos")) || [];
+const ADMIN_PASSWORD = "mijnwachtwoord123"; // ← HIER je eigen wachtwoord instellen
 
-function saveVideos() {
-    localStorage.setItem("videos", JSON.stringify(videos));
-}
-
-function extractYouTubeID(url) {
-    let regExp = /(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&]+)/;
-    let match = url.match(regExp);
-    return match ? match[1] : null;
-}
-
-function renderVideos() {
-    const grid = document.getElementById("videoGrid");
-    grid.innerHTML = "";
-
-    videos.forEach((video, index) => {
-        grid.innerHTML += `
-            <div class="video-card" onclick="playVideo('${video.id}')">
-                <img src="https://img.youtube.com/vi/${video.id}/0.jpg">
-                <div class="video-title">${video.title}</div>
-            </div>
-        `;
-    });
-}
-
-function playVideo(videoId) {
-    document.getElementById("player").innerHTML = `
-        <iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1"
-        allow="autoplay; encrypted-media" allowfullscreen></iframe>
-    `;
-}
-
-document.getElementById("videoForm").addEventListener("submit", function(e) {
-    e.preventDefault();
-
-    const title = document.getElementById("title").value;
-    const link = document.getElementById("youtubeLink").value;
-
-    const videoId = extractYouTubeID(link);
-
-    if (!videoId) {
-        alert("Ongeldige YouTube link!");
-        return;
-    }
-
-    videos.unshift({ title: title, id: videoId });
-    saveVideos();
-    renderVideos();
-
-    this.reset();
-});
-
-renderVideos();
-<script>
 let videos = JSON.parse(localStorage.getItem("videos")) || [];
 let likedVideos = JSON.parse(localStorage.getItem("likedVideos")) || {};
+let isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
 
 function saveVideos() {
     localStorage.setItem("videos", JSON.stringify(videos));
@@ -166,6 +119,32 @@ function saveVideos() {
 
 function saveLikes() {
     localStorage.setItem("likedVideos", JSON.stringify(likedVideos));
+}
+
+function checkLogin() {
+    if (isLoggedIn) {
+        document.getElementById("videoForm").style.display = "block";
+        document.getElementById("logoutBtn").style.display = "inline-block";
+        document.getElementById("loginBox").style.display = "none";
+    }
+}
+
+function login() {
+    const input = document.getElementById("adminPassword").value;
+
+    if (input === ADMIN_PASSWORD) {
+        isLoggedIn = true;
+        localStorage.setItem("isLoggedIn", "true");
+        checkLogin();
+    } else {
+        alert("Verkeerd wachtwoord!");
+    }
+}
+
+function logout() {
+    isLoggedIn = false;
+    localStorage.setItem("isLoggedIn", "false");
+    location.reload();
 }
 
 function extractYouTubeID(url) {
@@ -238,6 +217,7 @@ document.getElementById("videoForm").addEventListener("submit", function(e) {
 });
 
 renderVideos();
+checkLogin();
 </script>
 
 
