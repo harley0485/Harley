@@ -1,211 +1,201 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>CyberGame All-in-One</title>
+<!-- ================== COMPLETE WEBSITE MET FILTERS & ANIMATIES ================== -->
 <style>
-body { margin:0; overflow:hidden; background:black; }
-#ui {
-    position:absolute;
-    top:20px;
-    left:20px;
-    color:#0ff;
-    font-family:Arial;
-    text-shadow:0 0 10px #0ff;
-    z-index: 10;
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #121212;
+    color: #ffffff;
 }
-button { 
-    position:absolute;
-    bottom:20px;
-    left:50%;
-    transform:translateX(-50%);
-    padding:10px;
-    font-size:16px;
-    background:#0ff;
-    border:none;
-    cursor:pointer;
-    color:#000;
+
+header {
+    background-color: #1f1f1f;
+    padding: 20px;
+    text-align: center;
+}
+
+nav {
+    background-color: #000000;
+    padding: 12px;
+    text-align: center;
+}
+
+nav a {
+    color: white;
+    margin: 0 15px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+nav a:hover {
+    color: #ff0000;
+}
+
+.search-bar {
+    margin-top: 10px;
+}
+
+.search-bar input {
+    padding: 8px;
+    width: 250px;
+    border-radius: 6px;
+    border: none;
+}
+
+.filter-buttons {
+    margin: 15px 0;
+    text-align: center;
+}
+
+.filter-buttons button {
+    margin: 5px;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 20px;
+    background-color: #ff0000;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.filter-buttons button:hover {
+    background-color: #cc0000;
+    transform: scale(1.1);
+}
+
+.container {
+    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.thumbnail {
+    background: #1e1e1e;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    text-align: center;
+    transition: transform 0.4s, opacity 0.4s;
+    opacity: 1;
+}
+
+.thumbnail.hide {
+    opacity: 0;
+    transform: scale(0.8);
+    pointer-events: none;
+}
+
+.thumbnail:hover {
+    transform: scale(1.05);
+}
+
+.thumbnail img {
+    width: 100%;
+    border-radius: 8px;
+}
+
+footer {
+    background: #000000;
+    color: white;
+    text-align: center;
+    padding: 15px;
+    margin-top: 20px;
 }
 </style>
+
+<script>
+function searchVideos() {
+    let input = document.getElementById("searchInput").value.toLowerCase();
+    let videos = document.getElementsByClassName("thumbnail");
+
+    for (let i = 0; i < videos.length; i++) {
+        let title = videos[i].innerText.toLowerCase();
+        if (title.includes(input)) {
+            videos[i].classList.remove("hide");
+        } else {
+            videos[i].classList.add("hide");
+        }
+    }
+}
+
+function filterCategory(category) {
+    let videos = document.getElementsByClassName("thumbnail");
+
+    for (let i = 0; i < videos.length; i++) {
+        if (category === "all") {
+            videos[i].classList.remove("hide");
+        } else if (videos[i].dataset.category === category) {
+            videos[i].classList.remove("hide");
+        } else {
+            videos[i].classList.add("hide");
+        }
+    }
+}
+</script>
+
+
+<!-- ================== categorie.html ================== -->
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>Categorieën</title>
 </head>
 <body>
-<div id="ui">
-HP: <span id="hp">100</span><br>
-Score: <span id="score">0</span><br>
-Gun Level: <span id="gun">1</span>
+
+<header>
+    <h1>Video Categorieën</h1>
+    <div class="search-bar">
+        <input type="text" id="searchInput" onkeyup="searchVideos()" placeholder="Zoek video...">
+    </div>
+</header>
+
+<nav>
+    <a href="index.html">Home</a>
+    <a href="categorie.html">Categorieën</a>
+    <a href="contact.html">Contact</a>
+</nav>
+
+<div class="filter-buttons">
+    <button onclick="filterCategory('all')">Alles</button>
+    <button onclick="filterCategory('muziek')">Muziek</button>
+    <button onclick="filterCategory('entertainment')">Entertainment</button>
+    <button onclick="filterCategory('hiphop')">Hip Hop</button>
 </div>
-<button id="startBtn">CLICK TO START</button>
 
-<script type="module">
-import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160/build/three.module.js';
-import { PointerLockControls } from 'https://cdn.jsdelivr.net/npm/three@0.160/examples/jsm/controls/PointerLockControls.js';
-import { EffectComposer } from 'https://cdn.jsdelivr.net/npm/three@0.160/examples/jsm/postprocessing/EffectComposer.js';
-import { RenderPass } from 'https://cdn.jsdelivr.net/npm/three@0.160/examples/jsm/postprocessing/RenderPass.js';
-import { UnrealBloomPass } from 'https://cdn.jsdelivr.net/npm/three@0.160/examples/jsm/postprocessing/UnrealBloomPass.js';
+<div class="container">
+    <div class="thumbnail" data-category="muziek">
+        <a href="video1.html">
+            <img src="https://img.youtube.com/vi/dQw4w9WgXcQ/0.jpg">
+            <h3>Pop Muziek</h3>
+        </a>
+    </div>
 
-let scene = new THREE.Scene();
-scene.fog = new THREE.Fog(0x000000,20,200);
+    <div class="thumbnail" data-category="entertainment">
+        <a href="video2.html">
+            <img src="https://img.youtube.com/vi/9bZkp7q19f0/0.jpg">
+            <h3>K-Pop Entertainment</h3>
+        </a>
+    </div>
 
-let camera = new THREE.PerspectiveCamera(75,innerWidth/innerHeight,0.1,1000);
-let renderer = new THREE.WebGLRenderer({antialias:true});
-renderer.setSize(innerWidth,innerHeight);
-document.body.appendChild(renderer.domElement);
+    <div class="thumbnail" data-category="muziek">
+        <a href="video1.html">
+            <img src="https://img.youtube.com/vi/l482T0yNkeo/0.jpg">
+            <h3>Rock Muziek</h3>
+        </a>
+    </div>
 
-let composer = new EffectComposer(renderer);
-composer.addPass(new RenderPass(scene,camera));
-composer.addPass(new UnrealBloomPass(new THREE.Vector2(innerWidth,innerHeight),1.5,0.4,0.85));
+    <div class="thumbnail" data-category="hiphop">
+        <a href="video2.html">
+            <img src="https://img.youtube.com/vi/3JZ_D3ELwOQ/0.jpg">
+            <h3>Hip Hop</h3>
+        </a>
+    </div>
+</div>
 
-let controls = new PointerLockControls(camera,document.body);
-document.getElementById("startBtn").addEventListener("click",()=>{
-    controls.lock();
-    document.getElementById("startBtn").style.display="none";
-});
+<footer>
+    © 2026 Mijn Website
+</footer>
 
-camera.position.y=2;
-let neonLight = new THREE.PointLight(0x00ffff,3,100);
-neonLight.position.set(0,10,0);
-scene.add(neonLight);
-
-// Floor
-let floor = new THREE.Mesh(new THREE.PlaneGeometry(500,500), new THREE.MeshStandardMaterial({color:0x111111}));
-floor.rotation.x=-Math.PI/2;
-scene.add(floor);
-
-// Neon city
-for(let i=0;i<100;i++){
-    let h=Math.random()*20+5;
-    let b=new THREE.Mesh(new THREE.BoxGeometry(5,h,5), new THREE.MeshStandardMaterial({color:0x111122,emissive:0x00ffff,emissiveIntensity:0.3}));
-    b.position.set(Math.random()*200-100,h/2,Math.random()*200-100);
-    scene.add(b);
-}
-
-let enemies=[], bullets=[], particles=[], boss=null;
-let hp=100, score=0, gunLevel=1;
-
-// Enemy spawn
-function spawnEnemy(){
-    let e=new THREE.Mesh(new THREE.BoxGeometry(2,2,2), new THREE.MeshStandardMaterial({color:0xff00ff,emissive:0xff00ff,emissiveIntensity:0.5}));
-    e.position.set(Math.random()*100-50,1,Math.random()*-100);
-    scene.add(e);
-    enemies.push(e);
-}
-setInterval(spawnEnemy,2000);
-
-// Boss spawn
-function spawnBoss(){
-    boss=new THREE.Mesh(new THREE.BoxGeometry(10,10,10), new THREE.MeshStandardMaterial({color:0xff0000,emissive:0xaa0000,emissiveIntensity:0.7}));
-    boss.position.set(0,5,-50);
-    boss.hp=300;
-    scene.add(boss);
-}
-
-// Shoot
-function shoot(){
-    for(let i=0;i<gunLevel;i++){
-        let b=new THREE.Mesh(new THREE.SphereGeometry(0.2), new THREE.MeshBasicMaterial({color:0xffff00}));
-        b.position.copy(camera.position);
-        b.velocity=new THREE.Vector3();
-        camera.getWorldDirection(b.velocity);
-        b.velocity.multiplyScalar(1.5);
-        scene.add(b);
-        bullets.push(b);
-    }
-}
-document.addEventListener("mousedown",shoot);
-
-// Movement
-let move={f:false,b:false,l:false,r:false};
-document.addEventListener("keydown",e=>{
-    if(e.code==="KeyW") move.f=true;
-    if(e.code==="KeyS") move.b=true;
-    if(e.code==="KeyA") move.l=true;
-    if(e.code==="KeyD") move.r=true;
-});
-document.addEventListener("keyup",e=>{
-    if(e.code==="KeyW") move.f=false;
-    if(e.code==="KeyS") move.b=false;
-    if(e.code==="KeyA") move.l=false;
-    if(e.code==="KeyD") move.r=false;
-});
-
-// Particle explosion
-function explosion(pos){
-    for(let i=0;i<20;i++){
-        let p=new THREE.Mesh(new THREE.SphereGeometry(0.1), new THREE.MeshBasicMaterial({color:0xffaa00}));
-        p.position.copy(pos);
-        p.velocity=new THREE.Vector3(Math.random()-0.5, Math.random()-0.5, Math.random()-0.5);
-        scene.add(p);
-        particles.push(p);
-    }
-}
-
-// Animate
-function animate(){
-    requestAnimationFrame(animate);
-    if(move.f) controls.moveForward(0.3);
-    if(move.b) controls.moveForward(-0.3);
-    if(move.l) controls.moveRight(-0.3);
-    if(move.r) controls.moveRight(0.3);
-
-    bullets.forEach((b,i)=>{
-        b.position.add(b.velocity);
-        enemies.forEach((e,ei)=>{
-            if(b.position.distanceTo(e.position)<1.5){
-                explosion(e.position);
-                scene.remove(e);
-                scene.remove(b);
-                enemies.splice(ei,1);
-                bullets.splice(i,1);
-                score+=10;
-                if(score%100===0) gunLevel++;
-            }
-        });
-        if(boss && b.position.distanceTo(boss.position)<6){
-            boss.hp-=5;
-            explosion(b.position);
-            scene.remove(b);
-            bullets.splice(i,1);
-            if(boss.hp<=0){
-                scene.remove(boss);
-                boss=null;
-                score+=500;
-            }
-        }
-    });
-
-    enemies.forEach(e=>{
-        e.lookAt(camera.position);
-        e.translateZ(0.05);
-        if(e.position.distanceTo(camera.position)<2){
-            hp-=0.2;
-        }
-    });
-
-    particles.forEach((p,i)=>{
-        p.position.add(p.velocity);
-        p.scale.multiplyScalar(0.95);
-        if(p.scale.x<0.1){
-            scene.remove(p);
-            particles.splice(i,1);
-        }
-    });
-
-    if(score>300 && !boss) spawnBoss();
-
-    document.getElementById("hp").innerText=Math.floor(hp);
-    document.getElementById("score").innerText=score;
-    document.getElementById("gun").innerText=gunLevel;
-
-    composer.render();
-}
-animate();
-
-window.addEventListener("resize",()=>{
-    camera.aspect=innerWidth/innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(innerWidth,innerHeight);
-    composer.setSize(innerWidth,innerHeight);
-});
-</script>
 </body>
 </html>
