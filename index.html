@@ -156,7 +156,90 @@ document.getElementById("videoForm").addEventListener("submit", function(e) {
 });
 
 renderVideos();
+<script>
+let videos = JSON.parse(localStorage.getItem("videos")) || [];
+let likedVideos = JSON.parse(localStorage.getItem("likedVideos")) || {};
+
+function saveVideos() {
+    localStorage.setItem("videos", JSON.stringify(videos));
+}
+
+function saveLikes() {
+    localStorage.setItem("likedVideos", JSON.stringify(likedVideos));
+}
+
+function extractYouTubeID(url) {
+    let regExp = /(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&]+)/;
+    let match = url.match(regExp);
+    return match ? match[1] : null;
+}
+
+function renderVideos() {
+    const grid = document.getElementById("videoGrid");
+    grid.innerHTML = "";
+
+    videos.forEach((video, index) => {
+        grid.innerHTML += `
+            <div class="video-card">
+                <img src="https://img.youtube.com/vi/${video.id}/0.jpg" 
+                     onclick="playVideo('${video.id}')">
+                <div class="video-title">${video.title}</div>
+                <div style="padding:10px;">
+                    <button onclick="likeVideo(${index})">
+                        ❤️ ${video.likes || 0}
+                    </button>
+                </div>
+            </div>
+        `;
+    });
+}
+
+function playVideo(videoId) {
+    document.getElementById("player").innerHTML = `
+        <iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1"
+        allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    `;
+}
+
+function likeVideo(index) {
+    let video = videos[index];
+
+    if (likedVideos[video.id]) {
+        alert("Je hebt deze video al geliked!");
+        return;
+    }
+
+    video.likes = (video.likes || 0) + 1;
+    likedVideos[video.id] = true;
+
+    saveVideos();
+    saveLikes();
+    renderVideos();
+}
+
+document.getElementById("videoForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const title = document.getElementById("title").value;
+    const link = document.getElementById("youtubeLink").value;
+
+    const videoId = extractYouTubeID(link);
+
+    if (!videoId) {
+        alert("Ongeldige YouTube link!");
+        return;
+    }
+
+    videos.unshift({ title: title, id: videoId, likes: 0 });
+    saveVideos();
+    renderVideos();
+
+    this.reset();
+});
+
+renderVideos();
 </script>
+
 
 </body>
 </html>
