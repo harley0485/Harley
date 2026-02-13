@@ -1,210 +1,195 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VideoHub</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VideoHub</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
 
-<style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, Helvetica, sans-serif;
-}
+        body {
+            background-color: #111;
+            color: #fff;
+        }
 
-body {
-    background-color: #0f0f0f;
-    color: white;
-}
+        header {
+            background-color: #000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 40px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
 
-/* HEADER */
-header {
-    background: #000;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 15px 30px;
-}
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+        }
 
-.logo {
-    font-size: 26px;
-    font-weight: bold;
-}
+        .logo span {
+            background-color: #ff9900;
+            color: #000;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
 
-.logo span {
-    color: orange;
-}
+        nav a {
+            color: #ccc;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 15px;
+            transition: 0.3s;
+        }
 
-.search-box input {
-    padding: 8px 12px;
-    border-radius: 4px;
-    border: none;
-    width: 250px;
-}
+        nav a:hover {
+            color: #ff9900;
+        }
 
-.categories {
-    background: #1a1a1a;
-    padding: 10px 30px;
-    display: flex;
-    gap: 20px;
-    font-size: 14px;
-}
+        .search-bar input {
+            padding: 8px 12px;
+            border-radius: 4px;
+            border: none;
+            width: 200px;
+        }
 
-.categories span {
-    cursor: pointer;
-    transition: 0.2s;
-}
+        .container {
+            padding: 30px 40px;
+        }
 
-.categories span:hover {
-    color: orange;
-}
+        h2 {
+            margin-bottom: 20px;
+            border-left: 5px solid #ff9900;
+            padding-left: 10px;
+        }
 
-/* VIDEO GRID */
-.container {
-    padding: 30px;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 20px;
-}
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+        }
 
-.video-card {
-    background: #1c1c1c;
-    border-radius: 8px;
-    overflow: hidden;
-    cursor: pointer;
-    transition: 0.3s;
-}
+        .video-card {
+            background-color: #1c1c1c;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
 
-.video-card:hover {
-    transform: scale(1.03);
-}
+        .video-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 15px rgba(255, 153, 0, 0.6);
+        }
 
-.thumbnail {
-    position: relative;
-}
+        .thumbnail {
+            width: 100%;
+            height: 140px;
+            background-color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 14px;
+        }
 
-.thumbnail video {
-    width: 100%;
-    display: block;
-}
+        .video-info {
+            padding: 10px;
+        }
 
-.duration {
-    position: absolute;
-    bottom: 8px;
-    right: 8px;
-    background: rgba(0,0,0,0.7);
-    padding: 3px 6px;
-    font-size: 12px;
-    border-radius: 4px;
-}
+        .video-title {
+            font-size: 14px;
+            margin-bottom: 5px;
+            color: #fff;
+        }
 
-.video-info {
-    padding: 10px;
-}
+        .video-meta {
+            font-size: 12px;
+            color: #aaa;
+        }
 
-.video-title {
-    font-size: 14px;
-    margin-bottom: 5px;
-}
+        footer {
+            background-color: #000;
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+            color: #777;
+            font-size: 13px;
+        }
 
-.video-meta {
-    font-size: 12px;
-    color: #aaa;
-}
+        @media(max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 15px;
+            }
 
-/* FULLSCREEN PLAYER */
-.player-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.95);
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-}
-
-.player-overlay video {
-    width: 80%;
-    max-height: 80%;
-}
-
-.close-btn {
-    position: absolute;
-    top: 20px;
-    right: 40px;
-    font-size: 30px;
-    cursor: pointer;
-}
-</style>
+            .search-bar input {
+                width: 100%;
+            }
+        }
+    </style>
 </head>
-
 <body>
 
 <header>
     <div class="logo">Video<span>Hub</span></div>
-    <div class="search-box">
-        <input type="text" placeholder="Zoek video...">
+    <nav>
+        <a href="#">Home</a>
+        <a href="#">Categorieën</a>
+        <a href="#">Trending</a>
+        <a href="#">Nieuw</a>
+    </nav>
+    <div class="search-bar">
+        <input type="text" placeholder="Zoek video's...">
     </div>
 </header>
 
-<div class="categories">
-    <span>Trending</span>
-    <span>Nieuw</span>
-    <span>Populair</span>
-    <span>HD</span>
-</div>
-
 <div class="container">
-
-    <!-- VIDEO 1 -->
-    <div class="video-card" onclick="openVideo('video1.mp4')">
-        <div class="thumbnail">
-            <video src="video1.mp4" muted></video>
-            <div class="duration">4:32</div>
+    <h2>Trending Video's</h2>
+    <div class="video-grid">
+        <div class="video-card">
+            <div class="thumbnail">Thumbnail</div>
+            <div class="video-info">
+                <div class="video-title">Voorbeeld Video Titel</div>
+                <div class="video-meta">1.2M weergaven • 2 dagen geleden</div>
+            </div>
         </div>
-        <div class="video-info">
-            <div class="video-title">Mijn Video 1</div>
-            <div class="video-meta">120K views • 2 dagen geleden</div>
+
+        <div class="video-card">
+            <div class="thumbnail">Thumbnail</div>
+            <div class="video-info">
+                <div class="video-title">Nog een Video Titel</div>
+                <div class="video-meta">856K weergaven • 1 week geleden</div>
+            </div>
+        </div>
+
+        <div class="video-card">
+            <div class="thumbnail">Thumbnail</div>
+            <div class="video-info">
+                <div class="video-title">Populaire Video</div>
+                <div class="video-meta">2.4M weergaven • 3 dagen geleden</div>
+            </div>
+        </div>
+
+        <div class="video-card">
+            <div class="thumbnail">Thumbnail</div>
+            <div class="video-info">
+                <div class="video-title">Nieuwe Upload</div>
+                <div class="video-meta">320K weergaven • Vandaag</div>
+            </div>
         </div>
     </div>
-
-    <!-- VIDEO 2 -->
-    <div class="video-card" onclick="openVideo('video2.mp4')">
-        <div class="thumbnail">
-            <video src="video2.mp4" muted></video>
-            <div class="duration">7:15</div>
-        </div>
-        <div class="video-info">
-            <div class="video-title">Mijn Video 2</div>
-            <div class="video-meta">89K views • 1 week geleden</div>
-        </div>
-    </div>
-
 </div>
 
-<!-- FULLSCREEN PLAYER -->
-<div class="player-overlay" id="player">
-    <div class="close-btn" onclick="closeVideo()">✖</div>
-    <video id="mainVideo" controls autoplay></video>
-</div>
-
-<script>
-function openVideo(src) {
-    const player = document.getElementById("player");
-    const video = document.getElementById("mainVideo");
-    video.src = src;
-    player.style.display = "flex";
-}
-
-function closeVideo() {
-    const player = document.getElementById("player");
-    const video = document.getElementById("mainVideo");
-    video.pause();
-    video.src = "";
-    player.style.display = "none";
-}
-</script>
+<footer>
+    © 2026 VideoHub - Alle rechten voorbehouden
+</footer>
 
 </body>
 </html>
