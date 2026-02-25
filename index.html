@@ -1,1 +1,202 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Simpele Chat</title>
+  <style>
+    :root{
+      --bg: #0f1220;
+      --panel: #141a2b;
+      --chat: #1e2540;
+      --me: #4e8cff;
+      --bot: #e2e2e2;
+      --text: #eaeaf0;
+      --input: #1f2540;
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; font-family: Arial, sans-serif; background: var(--bg); color: var(--text); }
+
+    .chat-container {
+      width: 90%;
+      max-width: 900px;
+      margin: 40px auto;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid #2a2a3a;
+      background: linear-gradient(#1a1f34, #0f1220);
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      height: 70vh;
+      min-height: 420px;
+    }
+
+    .chat-header {
+      padding: 12px 16px;
+      background: #141a2b;
+      border-bottom: 1px solid #2a2a3a;
+    }
+
+    .chat-header h1 {
+      margin: 0;
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    .messages {
+      padding: 14px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .message {
+      max-width: 80%;
+      padding: 10px 12px;
+      border-radius: 12px;
+      line-height: 1.4;
+      word-wrap: break-word;
+      background: var(--bot);
+      color: #111;
+      align-self: flex-start;
+    }
+
+    .message.me {
+      background: var(--me);
+      color: #fff;
+      align-self: flex-end;
+    }
+
+    .message .meta {
+      font-size: 0.75rem;
+      opacity: 0.8;
+      margin-bottom: 4px;
+    }
+
+    .chat-input {
+      display: flex;
+      padding: 12px;
+      gap: 8px;
+      border-top: 1px solid #2a2a3a;
+      background: #0e1230;
+    }
+
+    .chat-input input[type="text"] {
+      flex: 1;
+      padding: 12px 14px;
+      border-radius: 8px;
+      border: 1px solid #2a2a3a;
+      background: #1b2145;
+      color: #fff;
+    }
+
+    .chat-input button {
+      padding: 12px 16px;
+      border-radius: 8px;
+      border: none;
+      background: #4e8cff;
+      color: #fff;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .chat-input button:disabled {
+      background: #6b7280;
+      cursor: not-allowed;
+    }
+
+    /* Kleine scrollbar styling voor beter uiterlijk */
+    .messages::-webkit-scrollbar { width: 10px; height: 10px; }
+    .messages::-webkit-scrollbar-thumb { background: #2a2a3a; border-radius: 6px; }
+  </style>
+</head>
+<body>
+  <div class="chat-container" aria-label="Simpele chat">
+    <div class="chat-header">
+      <h1>Simpele chat demo</h1>
+    </div>
+
+    <div id="messages" class="messages" aria-live="polite">
+      <!-- voorbeeldberichten -->
+      <div class="message" role="article">
+        <div class="meta">Bot • 00:00</div>
+        Hallo! Dit is een eenvoudige chat. Typ iets en druk op Enter of op Verzenden.
+      </div>
+    </div>
+
+    <form id="chatForm" class="chat-input" autocomplete="off" onsubmit="return false;">
+      <input id="input" type="text" placeholder="Typ een bericht..." aria-label="Bericht invoeren" />
+      <button id="send" type="submit">Verzenden</button>
+    </form>
+  </div>
+
+  <script>
+    const input = document.getElementById('input');
+    const sendBtn = document.getElementById('send');
+    const messages = document.getElementById('messages');
+    const form = document.getElementById('chatForm');
+
+    // Helper om huidige tijd als hh:mm te formatteren
+    function tijd() {
+      const now = new Date();
+      return now.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
+    }
+
+    // Simpele bot-antwoord (kan later uitgebreid worden)
+    function botAntwoord(bericht) {
+      const lower = bericht.toLowerCase();
+      if (lower.includes('hallo')) return 'Hallo! Hoe kan ik je helpen?';
+      if (lower.includes('hoe gaat het')) return 'Met mij gaat het goed. Jij?' ;
+      if (lower.includes('weer')) return 'Het hangt er vanaf waar je woont! 😄';
+      return 'Dank je! Kun je aangeven wat je wilt bereiken?';
+    }
+
+    function voegMessageTekst(tekst, isMij=false) {
+      const div = document.createElement('div');
+      div.className = 'message' + (isMij ? ' me' : '');
+      const meta = document.createElement('div');
+      meta.className = 'meta';
+      meta.textContent = (isMij ? 'Jij' : 'Bot') + ' • ' + tijd();
+      const content = document.createElement('div');
+      content.textContent = tekst;
+      div.appendChild(meta);
+      div.appendChild(content);
+      messages.appendChild(div);
+      messages.scrollTop = messages.scrollHeight;
+    }
+
+    function verzendBericht() {
+      const tekst = input.value.trim();
+      if (!tekst) return;
+      voegMessageTekst(tekst, true);
+      input.value = '';
+
+      // Simuleer bot-reactie na kleine vertraging
+      setTimeout(() => {
+        const antwoord = botAntwoord(tekst);
+        voegMessageTekst(antwoord, false);
+      }, 400);
+    }
+
+    // Evenementen
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      verzendBericht();
+    });
+
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        verzendBericht();
+      }
+    });
+
+    // Init focus
+    window.addEventListener('load', () => {
+      input.focus();
+    });
+  </script>
+</body>
+</html>
 
